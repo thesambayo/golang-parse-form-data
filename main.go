@@ -1,20 +1,29 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
 	"net/http"
 	"text/template"
 )
 
+type NewEventRequest struct {
+	FullName  string   `json:"fullName"`
+	EventDate string   `json:"eventDate"`
+	EventType string   `json:"eventType"`
+	Details   string   `json:"details"`
+	Interest  []string `json:"interest"`
+}
+
 func main() {
 	mux := http.NewServeMux()
+
 	// serve static files eg. css, js, images
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	mux.Handle("GET /static/{filePath...}", http.StripPrefix("/static", fileServer))
 
 	mux.HandleFunc("GET /{$}", home)
-	mux.HandleFunc("POST /create", createTask)
+	mux.HandleFunc("POST /create", createEvent)
 
 	err := http.ListenAndServe(":8080", mux)
 	if err != nil {
@@ -38,21 +47,23 @@ func home(resWriter http.ResponseWriter, request *http.Request) {
 
 }
 
-func createTask(resWriter http.ResponseWriter, request *http.Request) {
+func createEvent(resWriter http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()
 	if err != nil {
-		resWriter.WriteHeader(http.StatusBadRequest)
-		resWriter.Write([]byte("Invalid request"))
+		http.Error(resWriter, "Error parsing form data", http.StatusBadRequest)
 		return
 	}
 
-	fmt.Println(request.PostForm)
-	resWriter.Write([]byte("Posting titles!"))
-	// err := request.ParseForm()
-	// if err != nil {
-	// 	resWriter.WriteHeader(http.StatusBadRequest)
-	// 	resWriter.Write([]byte("Invalid request"))
-	// 	return
-	// }
-	// resWriter.Write([]byte(request.PostForm.Get("title")))
+	newEventRequest := NewEventRequest{
+		FullName:  request.PostForm.Get("fullName"),
+		EventDate: request.PostForm.Get("eventDate"),
+		EventType: request.PostForm.Get("eventType"),
+		Details:   request.PostForm.Get("details"),
+		Interest:  request.PostForm["interest"],
+	}
+
+	resWriter.Header().Set("Content-Type", "application/json")
+	resWriter.WriteHeader(http.StatusCreated)
+	json.NewEncoder(resWriter).Encode(newEventRequest)
+	// resWriter.Write([]byte(newEventRequest.FullName + " event has been created"))
 }

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Create task form</title>
+        <link rel="stylesheet" href="/static/styles.css" />
+    </head>
+    <body>
+        <div class="px-5">
+            <div class="py-8">
+                <small class="rounded-lg bg-indigo-600 px-2 text-white">
+                    How to parse form data in Golang
+                </small>
+                <h1 class="text-4xl font-bold">Create Event Form</h1>
+                <div class="mt-3 flex gap-x-4">
+                    <a
+                        target="_blank"
+                        class="underline"
+                        href="https://www.samueladebayo.dev/posts/golang-getting-values-from-request-body/"
+                    >
+                        Documentation
+                    </a>
+                    <a
+                        target="_blank"
+                        class="underline"
+                        href="https://github.com/thesambayo/go-docker"
+                    >
+                        Repo
+                    </a>
+                </div>
+            </div>
+
+            <form class="max-w-md" action="/create" method="POST">
+                <div class="grid grid-cols-1 gap-6">
+                    <label class="block">
+                        <span>Full name</span>
+                        <input
+                            name="fullName"
+                            type="text"
+                            class="mt-1 block w-full"
+                            placeholder=""
+                        />
+                    </label>
+                    <label class="block">
+                        <span>When is your event?</span>
+                        <input
+                            type="date"
+                            name="eventDate"
+                            class="mt-1 block w-full"
+                        />
+                    </label>
+                    <label class="block">
+                        <span>What type of event is it?</span>
+                        <select class="mt-1 block w-full" name="eventType">
+                            <option value="corporate">Corporate event</option>
+                            <option value="wedding">Wedding</option>
+                            <option value="birthday">Birthday</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </label>
+                    <label class="block">
+                        <span>Additional details</span>
+                        <textarea
+                            value="details"
+                            class="mt-1 block w-full"
+                            rows="3"
+                        ></textarea>
+                    </label>
+                    <fieldset>
+                        <legend>Task interests</legend>
+                        <div>
+                            <input
+                                type="checkbox"
+                                id="coding"
+                                name="interest"
+                                value="coding"
+                            />
+                            <label for="coding">Coding</label>
+                        </div>
+                        <div>
+                            <input
+                                type="checkbox"
+                                id="music"
+                                name="interest"
+                                value="music"
+                            />
+                            <label for="music">Music</label>
+                        </div>
+                        <div>
+                            <input
+                                type="checkbox"
+                                id="sports"
+                                name="interest"
+                                value="sports"
+                            />
+                            <label for="sports">Sports</label>
+                        </div>
+                    </fieldset>
+                    <button type="submit" class="bg-indigo-600 py-2 text-white">
+                        Create task
+                    </button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
